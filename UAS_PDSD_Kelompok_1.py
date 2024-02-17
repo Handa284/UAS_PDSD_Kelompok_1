@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from streamlit_option_menu import option_menu
 
-# Load data
 @st.cache_data
-#Load Data CSV
 def load_data(url) :
     df = pd.read_csv(url)
     return df
@@ -40,22 +38,19 @@ def Analisis_Perkembangan () :
 
     st.header("Tabel Perkembangan Total Pendapatan")
     st.dataframe(data_payment)
-    # Streamlit app
     st.header('Grafik Pertumbuhan Total Pendapatan')
 
-    # Create a figure and plot on it
     fig, ax = plt.subplots(figsize=(14, 8))
     ax.plot(data_payment.index.astype(str), data_payment['payment_value'], marker='o')
     ax.set_xlabel('Bulan')
     ax.set_ylabel('Pertumbuhan (%)')
     ax.set_title('Grafik Pertumbuhan Total Pendapatan')
 
-    # Set x-axis ticks and labels to show every 3rd month
-    x_ticks = data_payment.index.astype(str)[::3]  # Show every 3rd month
-    ax.set_xticks(x_ticks)
-    ax.set_xticklabels(x_ticks, rotation=45)  # Rotate the labels for better readability
 
-    # Show the plot using st.pyplot() with the figure object
+    x_ticks = data_payment.index.astype(str)[::3]
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels(x_ticks, rotation=45) 
+
     st.pyplot(fig)
     
     with st.expander("Penjelasan Total Pendapatan Tiap Bulan") :
@@ -64,9 +59,7 @@ def Analisis_Perkembangan () :
     
     
     
-    
 def Analisis_Kota():
-    #Membuat sebuah data yang sudah di satukan dari 3 tabel menggunakan metode merge
     df_data_order.dropna(subset=['order_approved_at','order_delivered_carrier_date','order_delivered_customer_date'], axis=0, inplace=True)
     df_data_order.reset_index(drop=True, inplace=True)
     
@@ -76,45 +69,36 @@ def Analisis_Kota():
     data_customer['price'] = data_customer['price'] * data_customer['order_item_id']
     data_customer = data_customer.loc[:, ['customer_id', 'customer_city', 'price']]
 
-    #Menentukan kota dari tertinggi
     grup = data_customer.groupby(['customer_city'])['price'].sum()
     grup1 = grup.nlargest(5)
 
     st.header("Tabel Kota dari Tertinggi")
     st.dataframe(grup1)
     
-    # Streamlit app
     st.header("Diagram Pie 5 Kota Dengan Penjualan Tertinggi")
 
-    # Plot pie chart
     fig, ax = plt.subplots()
-    expose = [0.1, 0, 0, 0, 0]  # Explode the first slice (optional)
+    expose = [0.1, 0, 0, 0, 0]
     ax.pie(grup1, labels=grup1.index, autopct='%1.1f%%', shadow=True, startangle=50, explode=expose)
     ax.set_title("Top 5 Kota Penjualan dari yang Tertinggi")
     ax.legend(loc="best", bbox_to_anchor=(1.05, 1))
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
 
-    #Menentukan kota dari terendah
     grup = data_customer.groupby(['customer_city'])['price'].sum()
     grup2 = grup.nsmallest(5)
 
     st.header("Tabel Kota dari Terendah")
     st.dataframe(grup2)
 
-
-    # Streamlit app
     st.header("Diagram Pie 5 Kota Dengan Penjualan Terendah")
 
-    # Plot pie chart
     fig, ax = plt.subplots()
-    expose = [0.1, 0, 0, 0, 0]  # Explode the first slice (optional)
+    expose = [0.1, 0, 0, 0, 0]
     ax.pie(grup2, labels=grup2.index, autopct='%1.1f%%', shadow=True, startangle=50, explode=expose)
     ax.set_title("Top 5 Kota Penjualan dari yang Terendah")
     ax.legend(loc="best", bbox_to_anchor=(1.05, 1))
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Kota") :
@@ -141,28 +125,24 @@ def Analisis_Pemesanan():
     st.header("Tabel Banyaknya Pemesanan Dalam Periode Bulan")
     st.dataframe(data_pemesanan)
 
-    # Streamlit app
     st.header('Grafik Pertumbuhan Total Pemesanan')
 
 
-    # Plot line chart
     fig, ax = plt.subplots(figsize=(14, 8))
-    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')  # Convert PeriodIndex to string for x-axis
+    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')
     ax.set_title('Grafik Pertumbuhan Total Pemesanan')
     ax.set_xlabel('Bulan')
     ax.set_ylabel('Pertumbuhan (%)')
 
-    # Set x-axis ticks and labels
     x_labels = []
     for i, period in enumerate(data_pemesanan.index):
-        if i % 2 == 0:  # Show label for every two months
+        if i % 2 == 0:
             x_labels.append(period.strftime('%b %Y'))
         else:
-            x_labels.append('')  # Empty label for other months
+            x_labels.append('')  
     ax.set_xticks(range(len(x_labels)))
     ax.set_xticklabels(x_labels)
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Total Pemesanan") :
@@ -173,28 +153,22 @@ def Analisis_Pemesanan():
 def Analisis_Penjualan() :
     data_product = pd.merge(df_data_order_item, df_data_product, on='product_id', how='inner')
     data_product = pd.merge(data_product, df_data_product_category, on='product_category_name', how='inner')
-    # Memilih kolom yang diperlukan
 
     data_product = data_product.loc[:, ['product_id', 'product_category_name','product_category_name_english']]
-    # Menghitung jumlah penjualan setiap produk
     product_counts = data_product['product_category_name_english'].value_counts()
 
-    # Menampilkan 5 produk dengan penjualan terbanyak
     top_5_products = product_counts.nlargest(5)
     st.header("Tabel 5 Produk Dengan Penjualan Terbanyak")
     st.dataframe(top_5_products)
 
-    # Streamlit app
     st.header('Diagram Pie 5 Produk Paling Banyak Diminati')
 
-    # Plot pie chart
     fig, ax = plt.subplots()
-    expose = [0.1, 0, 0, 0, 0]  # Explode the first slice (optional)
+    expose = [0.1, 0, 0, 0, 0]
     ax.pie(top_5_products, labels=top_5_products.index, autopct='%1.1f%%', shadow=True, explode=expose)
     ax.set_title('5 Produk Paling Banyak Diminati')
     ax.legend(loc="best", bbox_to_anchor=(1.8, 1))
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Penjualan") :
@@ -203,24 +177,19 @@ def Analisis_Penjualan() :
     
 def Analisis_Pembayaran(df_data_payment) :
     df_data_payment = df_data_payment.loc[:, ['order_id', 'payment_type']]
-    # Menghitung jenis pembayaran yang digunakan
     payment_counts = df_data_payment['payment_type'].value_counts()
 
-    # Menampilkan 4 jenis pembayaran terbanyak
     top_payments = payment_counts.nlargest(4)
     st.header("Tabel Dengan 4 Jenis Pembayaran Terbanyak")
     st.dataframe(top_payments)
 
-    # Streamlit app
     st.header('Diagram Pie 4 Jenis Pembayaran Terbanyak digunakan')
 
-    # Plot pie chart
     fig, ax = plt.subplots()
     ax.pie(top_payments, labels=top_payments.index, autopct='%1.1f%%', shadow=True)
     ax.set_title('4 Jenis Pembayaran Terbanyak digunakan')
     ax.legend(loc="best", bbox_to_anchor=(1.5, 1))
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Jenis Pembayaran") :
