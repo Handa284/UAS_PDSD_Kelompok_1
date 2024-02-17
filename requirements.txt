@@ -1,6 +1,6 @@
 numpy
-streamlit
 pandas
-streamlit_option_menu
-requests
 matplotlib
+streamlit
+requests
+streamlit_option_menu
