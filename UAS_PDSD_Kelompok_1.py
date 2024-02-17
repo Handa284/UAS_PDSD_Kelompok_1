@@ -140,24 +140,21 @@ def Analisis_Pemesanan():
     st.header('Grafik Pertumbuhan Total Pemesanan')
 
 
-    # Plot line chart
     fig, ax = plt.subplots(figsize=(14, 8))
-    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')  # Convert PeriodIndex to string for x-axis
+    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')
     ax.set_title('Grafik Pertumbuhan Total Pemesanan')
     ax.set_xlabel('Bulan')
     ax.set_ylabel('Pertumbuhan (%)')
 
-    # Set x-axis ticks and labels
     x_labels = []
     for i, period in enumerate(data_pemesanan.index):
-        if i % 2 == 0:  # Show label for every two months
+        if i % 2 == 0:
             x_labels.append(period.strftime('%b %Y'))
         else:
             x_labels.append('')  
     ax.set_xticks(range(len(x_labels)))
     ax.set_xticklabels(x_labels)
 
-    # Show the plot using st.pyplot() with the figure object
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Total Pemesanan") :
