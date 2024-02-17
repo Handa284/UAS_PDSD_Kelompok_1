@@ -37,6 +37,9 @@ def Analisis_Perkembangan () :
     data_payment = data_payment.groupby('year_month')['payment_value'].sum()
     data_payment = pd.DataFrame(data_payment)
 
+    st.write('Nama : Stevanus Ryo Wijaya (10122014)')
+    st.write('Pada analisis ini saya ingin memperlihatkan total pendapatan menggunakan matplotlib')
+    st.write('Alasan informasi ini dibuat untuk melihat petumbuhan total pendapatan, sehingga perusahaan dapat melihat dengan lebih baik apakah perusahaanya dijalankan dengan baik atau tidak dilihat dari total pendapatannya')
 
     st.header("Tabel Perkembangan Total Pendapatan")
     st.dataframe(data_payment)
@@ -79,6 +82,10 @@ def Analisis_Kota():
     #Menentukan kota dari tertinggi
     grup = data_customer.groupby(['customer_city'])['price'].sum()
     grup1 = grup.nlargest(5)
+
+    st.write('Nama : Raditya Aryabudhi Ramadhan (10122032)')
+    st.write('Pada analisis ini saya ingin memperlihatkan kota dengan penjualan tertinggi hingga terendah menggunakan matplotlib')
+    st.write('Alasan dibuatnya analisis ini adalah untuk memperlihatkan kota mana yang memiliki penjualan tertinggi hingga terendah, sehingga perusahaan dapat melihat kota mana yang memiliki penjualan tertinggi.')
 
     st.header("Tabel Kota dari Tertinggi")
     st.dataframe(grup1)
@@ -138,31 +145,35 @@ def Analisis_Pemesanan():
     data_pemesanan['year_month'] = pd.to_datetime(data_pemesanan['order_purchase_timestamp']).dt.to_period('M')
     data_pemesanan = data_pemesanan.groupby('year_month')['order_id'].count()
     data_pemesanan = pd.DataFrame(data_pemesanan)
+
+    st.write('Nama : Raihan Dafa Alfarizi (10122022)')
+    st.write('Pada analisis ini saya ingin menyampaikan tentang pertumbuhan total pemesanan yang terjadi menggunakan matplotlib')
+    st.write('Alasan dibuatnya analisis ini adalah untuk mempermudah perusahaan melihat perkembangan pemesanan. Ketika perusahaan dapat dengan mudah melihat perkembangannya maka proses evaluasi bisa diselesaikan dengan cepat.')
+
     st.header("Tabel Banyaknya Pemesanan Dalam Periode Bulan")
     st.dataframe(data_pemesanan)
 
-    # Streamlit app
     st.header('Grafik Pertumbuhan Total Pemesanan')
 
 
-    # Plot line chart
+    
     fig, ax = plt.subplots(figsize=(14, 8))
-    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')  # Convert PeriodIndex to string for x-axis
+    ax.plot(data_pemesanan.index.astype(str), data_pemesanan.values, marker='o')  
     ax.set_title('Grafik Pertumbuhan Total Pemesanan')
     ax.set_xlabel('Bulan')
     ax.set_ylabel('Pertumbuhan (%)')
 
-    # Set x-axis ticks and labels
+    
     x_labels = []
     for i, period in enumerate(data_pemesanan.index):
-        if i % 2 == 0:  # Show label for every two months
+        if i % 2 == 0:  
             x_labels.append(period.strftime('%b %Y'))
         else:
-            x_labels.append('')  # Empty label for other months
+            x_labels.append('')  
     ax.set_xticks(range(len(x_labels)))
     ax.set_xticklabels(x_labels)
 
-    # Show the plot using st.pyplot() with the figure object
+    
     st.pyplot(fig)
     
     with st.expander("Penjelasan Analisis Total Pemesanan") :
@@ -178,6 +189,10 @@ def Analisis_Penjualan() :
     data_product = data_product.loc[:, ['product_id', 'product_category_name','product_category_name_english']]
     # Menghitung jumlah penjualan setiap produk
     product_counts = data_product['product_category_name_english'].value_counts()
+
+    st.write('Nama : Muhammad Rivaldi Setiawan (10122031)')
+    st.write('Pada analisis ini saya ingin meperlihatkan produk mana yang paling diminati menggunakan matplotlib')
+    st.write('Alasan dibuatnya analisis ini adalah untuk melihat produk mana yang paling banyak terjual di perusahaan')
 
     # Menampilkan 5 produk dengan penjualan terbanyak
     top_5_products = product_counts.nlargest(5)
@@ -206,6 +221,10 @@ def Analisis_Pembayaran(df_data_payment) :
     # Menghitung jenis pembayaran yang digunakan
     payment_counts = df_data_payment['payment_type'].value_counts()
 
+    st.write('Nama : Andreas Kurnia (10122015)')
+    st.write('Pada analisis ini saya ingin menyampaikan  jenis pembayaran terbanyak')
+    st.write('Alasan dibuatnya analisis ini adalah untuk melihat penggunaan jenis pembayaraan apa yang peling banyak digunakan oleh pembeli')
+
     # Menampilkan 4 jenis pembayaran terbanyak
     top_payments = payment_counts.nlargest(4)
     st.header("Tabel Dengan 4 Jenis Pembayaran Terbanyak")
@@ -226,15 +245,28 @@ def Analisis_Pembayaran(df_data_payment) :
     with st.expander("Penjelasan Analisis Jenis Pembayaran") :
         st.write('Credit card merupakan metode pembayaran yang paling sering digunakan. jika perusahaan ingin meningkatkan pendapatan, perusahaan dapat melakukan promosi atau diskon khusus untuk penggunaan metode pembayaran tertentu. Misalnya, diskon 10% untuk pembayaran dengan voucher. selain memberikan voucher perusahaan dapat meLakukan edukasi kepada pelanggan mengenai keuntungan menggunakan metode pembayaran lainnya. Misalnya, pembayaran dengan boleto bisa lebih aman karena tidak memerlukan detail kartu kredit.')
     
-    
+def profile_kelompok() :
+    st.markdown("""
+                - Kelas : IF-1
+                - Kelompok : 1 - Jupyter
+                - Anggota :
+                    - 10122014 - Stevanus Ryo Wijaya
+                    - 10122015 - Andreas Kurnia
+                    - 10122022 - Raihan Dafa Alfarizi
+                    - 10122031 - Muhammad Rivaldi Setiawan
+                    - 10122032 - Raditya Aryabudhi Ramadhan
+                """)
 
 with st.sidebar :
-    selected = option_menu('Menu',['Analisis Total Pendapatan','Analisis Kota','Analisis Total Pemesanan','Analisis Penjualan','Analisis Jenis Pembayaran'],
-    icons =["graph-up", "graph-up", "graph-up", "graph-up", "graph-up"],
+    selected = option_menu('Menu',['Profile Kelompok','Analisis Total Pendapatan','Analisis Kota','Analisis Total Pemesanan','Analisis Penjualan','Analisis Jenis Pembayaran'],
+    icons =["easel", "graph-up", "graph-up", "graph-up", "graph-up", "graph-up"],
     menu_icon="cast",
     default_index=0)
-    
-if (selected == 'Analisis Total Pendapatan') :
+
+if (selected == 'Profile Kelompok') :
+    st.title('Proyek Analisis Data: Nama dataset')   
+    profile_kelompok() 
+elif (selected == 'Analisis Total Pendapatan') :
     st.title(f"Analisis Total Pendapatan")
     Analisis_Perkembangan()
 elif (selected == 'Analisis Kota') :
