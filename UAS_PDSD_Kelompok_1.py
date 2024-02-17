@@ -244,7 +244,9 @@ elif (selected == 'Analisis Total Pemesanan') :
     st.title(f"Analisis Total Pemesanan")
     Analisis_Pemesanan()
 elif (selected == 'Analisis Penjualan') :
+    st.title(f"Analisis Penjualan")
     Analisis_Penjualan()
 elif (selected == 'Analisis Jenis Pembayaran') :
+    st.title(f"Analisis Jenis Pembayran")
     Analisis_Pembayaran(df_data_payment)
     
