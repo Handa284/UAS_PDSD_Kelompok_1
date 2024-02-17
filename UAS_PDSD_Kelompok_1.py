@@ -6,17 +6,18 @@ from streamlit_option_menu import option_menu
 
 # Load data
 @st.cache_data
-def load_data():
-    df_data_customer = pd.read_csv('customers_dataset.csv')
-    df_data_geolocation = pd.read_csv('geolocation_dataset.csv')
-    df_data_order_item = pd.read_csv('order_items_dataset.csv')
-    df_data_payment = pd.read_csv('order_payments_dataset.csv')
-    df_data_order = pd.read_csv('orders_dataset.csv')
-    df_data_product_category = pd.read_csv('product_category_name_translation.csv')
-    df_data_product = pd.read_csv('products_dataset.csv')
+#Load Data CSV
+def load_data(url) :
+    df = pd.read_csv(url)
+    return df
 
-    return df_data_customer, df_data_geolocation, df_data_order_item, df_data_payment, df_data_order, df_data_product_category, df_data_product
-df_data_customer, df_data_geolocation, df_data_order_item, df_data_payment, df_data_order, df_data_product_category, df_data_product = load_data()
+df_data_customer = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/customers_dataset.csv')
+df_data_order_item = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/order_items_dataset.csv')
+df_data_payment = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/order_payments_dataset.csv')
+df_data_order = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/orders_dataset.csv')
+df_data_product_category = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/product_category_name_translation.csv')
+df_data_product = load_data('https://raw.githubusercontent.com/Handa284/UAS_PDSD_Kelompok_1/main/products_dataset.csv')
+
 
 def Analisis_Perkembangan () :
     df_data_order.dropna(subset=['order_approved_at','order_delivered_carrier_date','order_delivered_customer_date'], axis=0, inplace=True)
@@ -58,7 +59,7 @@ def Analisis_Perkembangan () :
     st.pyplot(fig)
     
     with st.expander("Penjelasan Total Pendapatan Tiap Bulan") :
-        st.write('dilihat dari grafik, pertumbuhan pendapatan semakin meningkat awal awal dan puncaknya berada pada bulan november 2017, setelah itu pendapatan menjadi cukup stabil tetapi turun di bulan terakhir. solusi untuk perusahaan adalah dengan meningkatkan aspek aspek seperti layanan, kualitas produk, dan lainnya agar penjulaan dapat kembali meningkat')
+        st.write('Dilihat dari grafik, pertumbuhan pendapatan semakin meningkat awal awal dan puncaknya berada pada bulan november 2017, setelah itu pendapatan menjadi cukup stabil tetapi turun di bulan terakhir. solusi untuk perusahaan adalah dengan meningkatkan aspek aspek seperti layanan, kualitas produk, dan lainnya agar penjulaan dapat kembali meningkat')
     
     
     
